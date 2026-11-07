@@ -93,6 +93,20 @@ async def test_sensoren_nach_nachholen(hass: HomeAssistant, freezer) -> None:
         data={CONF_TOKEN: "geheim", CONF_LINK_ID: 37, CONF_START_DATE: "2026-11-01"},
     )
     entry.add_to_hass(hass)
+    with (
+        patch("custom_components.oilview.api.OilViewApi.get_links", _fake_get_links),
+        patch("custom_components.oilview.OilViewCoordinator.async_backfill"),
+    ):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        registry = er.async_get(hass)
+        monat_id = registry.async_get_entity_id("sensor", DOMAIN, "37_verbrauch_monat")
+        tank_id = registry.async_get_entity_id("sensor", DOMAIN, "37_tankstand")
+        # vor dem Nachholen: Bilanz nicht verfügbar, Tankstand schon
+        assert hass.states.get(monat_id).state == "unavailable"
+        assert hass.states.get(tank_id).state == "2140.0"
+        assert await hass.config_entries.async_unload(entry.entry_id)
+
     with patch("custom_components.oilview.api.OilViewApi.get_links", _fake_get_links):
         assert await hass.config_entries.async_setup(entry.entry_id)
         await hass.async_block_till_done(wait_background_tasks=True)

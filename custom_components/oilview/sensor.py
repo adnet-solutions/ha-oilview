@@ -56,6 +56,9 @@ class OilViewSensorDescription(SensorEntityDescription):
 
     value_fn: Callable[[OilViewData], Any]
     attrs_fn: Callable[[OilViewData], dict[str, Any]] | None = None
+    # Verbrauchs-/Tankungswerte sind erst nach vollständigem Nachholen gültig;
+    # vorher würde die Lücke bis heute als Tankung erscheinen.
+    needs_backfill: bool = True
 
 
 VERBRAUCH = dict(
@@ -67,6 +70,7 @@ VERBRAUCH = dict(
 SENSORS: tuple[OilViewSensorDescription, ...] = (
     OilViewSensorDescription(
         key="tankstand",
+        needs_backfill=False,
         translation_key="tankstand",
         device_class=SensorDeviceClass.VOLUME_STORAGE,
         native_unit_of_measurement=UnitOfVolume.LITERS,
@@ -77,6 +81,7 @@ SENSORS: tuple[OilViewSensorDescription, ...] = (
     ),
     OilViewSensorDescription(
         key="fuellgrad",
+        needs_backfill=False,
         translation_key="fuellgrad",
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -127,6 +132,7 @@ SENSORS: tuple[OilViewSensorDescription, ...] = (
     ),
     OilViewSensorDescription(
         key="tageswerte",
+        needs_backfill=False,
         translation_key="tageswerte",
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: d.days_stored,
@@ -164,6 +170,14 @@ class OilViewSensor(CoordinatorEntity[OilViewCoordinator], SensorEntity):
             manufacturer=MANUFACTURER,
             model="OilView",
             configuration_url="https://www.oilview.de",
+        )
+
+    @property
+    def available(self) -> bool:
+        if not super().available:
+            return False
+        return not self.entity_description.needs_backfill or (
+            self.coordinator.data is not None and self.coordinator.data.backfill_done
         )
 
     @property
