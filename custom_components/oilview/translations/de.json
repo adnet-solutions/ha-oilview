@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "OilView",
+        "description": "API-Token aus dem OilView-Portal eingeben. Ab dem Startdatum werden Verbrauch und Tankungen rückwirkend berechnet.",
+        "data": {
+          "token": "API-Token",
+          "start_date": "Startdatum der Auswertung"
+        }
+      },
+      "link": {
+        "title": "Tank auswählen",
+        "data": {
+          "link_id": "Tank / Messsonde"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Token erneuern",
+        "description": "Der OilView-Token ist ungültig. Bitte neuen Token eingeben.",
+        "data": {
+          "token": "API-Token"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Token ungültig oder ohne Berechtigung.",
+      "cannot_connect": "OilView-API nicht erreichbar.",
+      "no_tanks": "Mit diesem Token ist kein Tank sichtbar."
+    },
+    "abort": {
+      "already_configured": "Dieser Tank ist bereits eingerichtet.",
+      "reauth_successful": "Token aktualisiert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "OilView-Einstellungen",
+        "description": "Verbrauch wird erst gezählt, wenn der Stand mindestens um die Verbrauchsschwelle sinkt (dann der volle Betrag). Ein Anstieg ab der Tankungsschwelle gilt als Tankung.",
+        "data": {
+          "start_date": "Startdatum der Auswertung",
+          "consumption_threshold": "Verbrauchsschwelle",
+          "refill_threshold": "Tankungsschwelle"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "tankstand": {
+        "name": "Tankstand"
+      },
+      "fuellgrad": {
+        "name": "Füllgrad"
+      },
+      "verbrauch_heute": {
+        "name": "Verbrauch heute"
+      },
+      "verbrauch_monat": {
+        "name": "Verbrauch Monat"
+      },
+      "verbrauch_vormonat": {
+        "name": "Verbrauch Vormonat"
+      },
+      "verbrauch_jahr": {
+        "name": "Verbrauch Jahr"
+      },
+      "getankt_monat": {
+        "name": "Getankt Monat"
+      },
+      "getankt_jahr": {
+        "name": "Getankt Jahr"
+      },
+      "tageswerte": {
+        "name": "Gespeicherte Tageswerte"
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "OilView",
+        "description": "Enter the API token from the OilView portal. Consumption and refills are calculated retroactively from the start date.",
+        "data": {
+          "token": "API token",
+          "start_date": "Start date of the evaluation"
+        }
+      },
+      "link": {
+        "title": "Select tank",
+        "data": {
+          "link_id": "Tank / probe"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Renew token",
+        "description": "The OilView token is invalid. Please enter a new token.",
+        "data": {
+          "token": "API token"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid token or missing permission.",
+      "cannot_connect": "Cannot reach the OilView API.",
+      "no_tanks": "No tank is visible with this token."
+    },
+    "abort": {
+      "already_configured": "This tank is already configured.",
+      "reauth_successful": "Token updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "OilView settings",
+        "description": "Consumption is counted once the level drops by at least the consumption threshold (then the full amount). A rise of at least the refill threshold counts as a refill.",
+        "data": {
+          "start_date": "Start date of the evaluation",
+          "consumption_threshold": "Consumption threshold",
+          "refill_threshold": "Refill threshold"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "tankstand": {
+        "name": "Tank level"
+      },
+      "fuellgrad": {
+        "name": "Fill level"
+      },
+      "verbrauch_heute": {
+        "name": "Consumption today"
+      },
+      "verbrauch_monat": {
+        "name": "Consumption this month"
+      },
+      "verbrauch_vormonat": {
+        "name": "Consumption last month"
+      },
+      "verbrauch_jahr": {
+        "name": "Consumption this year"
+      },
+      "getankt_monat": {
+        "name": "Refilled this month"
+      },
+      "getankt_jahr": {
+        "name": "Refilled this year"
+      },
+      "tageswerte": {
+        "name": "Stored daily values"
+      }
+    }
+  }
+}
